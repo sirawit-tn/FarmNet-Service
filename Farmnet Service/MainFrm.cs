@@ -14,6 +14,7 @@ namespace Farmnet_Service
 {
     public partial class MainFrm : Form
     {
+        Process process;
         public MainFrm()
         {
             InitializeComponent();
@@ -84,8 +85,23 @@ namespace Farmnet_Service
             {
                 if (File.Exists(inputJSFile.Text))
                 {
-                    process.StartInfo.Arguments = "/C nodemon " + inputJSFile.Text;
+                    if (process == null)
+                        process = new Process()
+                        {
+                            StartInfo = new ProcessStartInfo()
+                            {
+                                FileName = "node.exe",
+                                Arguments = inputJSFile.Text,
+                                WindowStyle = ProcessWindowStyle.Hidden,
+                                RedirectStandardOutput = true,
+                                CreateNoWindow = true,
+                                UseShellExecute=false
+                            }
+                        };
+                    process.Exited += Process_Exited;
+                    process.OutputDataReceived += Process_OutputDataReceived;
                     process.Start();
+                    process.BeginOutputReadLine();
                     btnStop.Enabled = true;
                     btnStart.Enabled = false;
                 }
@@ -99,6 +115,20 @@ namespace Farmnet_Service
                 MessageBox.Show(this, ex.Message, "Farmnet Service", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
+        }
+
+        private void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            if (sender != process) return;
+            Console.Write(e.Data);
+        }
+
+        private void Process_Exited(object sender, EventArgs e)
+        {
+            process = null;
+            process.Dispose();
+            btnStart.Enabled = true;
+            btnStop.Enabled = false;
         }
 
         private void btnBrowse_Click(object sender, EventArgs e)
@@ -128,7 +158,9 @@ namespace Farmnet_Service
         {
             if (process != null)
             {
-                process.Close();
+                //process.close();
+                process.Kill();
+                process.Dispose();
                 process = null;
                 btnStart.Enabled = true;
                 btnStop.Enabled = false;

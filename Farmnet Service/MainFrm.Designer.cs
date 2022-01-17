@@ -42,7 +42,6 @@ namespace Farmnet_Service
             this.btnBrowse = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.btnLog = new System.Windows.Forms.Button();
-            this.process = new System.Diagnostics.Process();
             this.mainMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -139,19 +138,6 @@ namespace Farmnet_Service
             this.btnLog.UseVisualStyleBackColor = true;
             this.btnLog.Click += new System.EventHandler(this.btnLog_Click);
             // 
-            // process
-            // 
-            this.process.StartInfo.Domain = "";
-            this.process.StartInfo.FileName = "cmd.exe";
-            this.process.StartInfo.LoadUserProfile = false;
-            this.process.StartInfo.Password = null;
-            this.process.StartInfo.StandardErrorEncoding = null;
-            this.process.StartInfo.StandardInputEncoding = null;
-            this.process.StartInfo.StandardOutputEncoding = null;
-            this.process.StartInfo.UserName = "";
-            this.process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            this.process.SynchronizingObject = this;
-            // 
             // MainFrm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -190,7 +176,6 @@ namespace Farmnet_Service
         private System.Windows.Forms.Button btnBrowse;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.Button btnLog;
-        private System.Diagnostics.Process process;
     }
 }
 
